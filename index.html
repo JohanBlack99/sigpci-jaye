@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGPCI-JAYE — Tienda de Regalos JAYE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ───────────────────────────────────────────────── */
+    :root {
+      --cream:   #FAF6F0;
+      --parchment: #F0E8D8;
+      --ink:     #1A1208;
+      --cocoa:   #4A2C12;
+      --terracotta: #C4622D;
+      --gold:    #C89B3C;
+      --sage:    #5C7A5E;
+      --mist:    #E8EEE8;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --font-mono:    'DM Mono', monospace;
+
+      --max: 1100px;
+      --r:   8px;
+    }
+
+    /* ── RESET ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    img { max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── HEADER / NAV ──────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--cocoa);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--gold);
+      letter-spacing: .03em;
+    }
+    .logo span { color: var(--cream); font-weight: 400; font-size: .95rem; }
+    nav { display: flex; gap: 1.5rem; }
+    nav a {
+      color: var(--parchment);
+      font-size: .875rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      opacity: .85;
+      transition: opacity .2s;
+    }
+    nav a:hover { opacity: 1; color: var(--gold); }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(145deg, var(--cocoa) 0%, #2E1A08 60%, #1A0F04 100%);
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      padding: 5rem 2rem 4rem;
+      max-width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 70% 40%, rgba(200,155,60,.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-text { max-width: 560px; margin: auto; padding-left: 4vw; }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.12;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero-sub {
+      color: #C8BAA8;
+      font-size: 1.05rem;
+      max-width: 420px;
+      margin-bottom: 2.4rem;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--terracotta);
+      color: #fff;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: .03em;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 20px rgba(196,98,45,.4);
+    }
+    .hero-cta:hover { background: #A84E22; transform: translateY(-2px); }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    /* ── CARD decorativa en hero ─────────────────────────────── */
+    .hero-card-wrap { display: flex; justify-content: center; align-items: center; padding-right: 4vw; }
+    .hero-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(200,155,60,.25);
+      border-radius: 16px;
+      padding: 2.2rem 2rem;
+      width: 340px;
+      backdrop-filter: blur(6px);
+    }
+    .hero-card-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid rgba(200,155,60,.2);
+    }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.4rem; }
+    .stat { text-align: center; }
+    .stat-num { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: var(--cream); }
+    .stat-label { font-size: .72rem; color: #A89880; letter-spacing: .06em; text-transform: uppercase; }
+    .module-list { list-style: none; }
+    .module-list li {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .85rem; color: #C8BAA8; padding: .35rem 0;
+    }
+    .module-list li::before { content: '→'; color: var(--gold); font-weight: 700; }
+
+    /* ── SECCIÓN GENÉRICA ─────────────────────────────────────── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: var(--max); margin: auto; }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--cocoa);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .section-lead { color: #5A4030; font-size: 1.05rem; max-width: 560px; margin-bottom: 3rem; line-height: 1.7; }
+
+    /* ── PROBLEMA ─────────────────────────────────────────────── */
+    .problema-bg { background: var(--parchment); }
+    .causa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+    .causa-card {
+      background: var(--cream);
+      border-radius: var(--r);
+      padding: 1.4rem 1.2rem;
+      border-left: 4px solid var(--terracotta);
+    }
+    .causa-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+    .causa-card h4 { font-size: .9rem; font-weight: 600; color: var(--cocoa); margin-bottom: .3rem; }
+    .causa-card p { font-size: .82rem; color: #5A4030; line-height: 1.5; }
+
+    /* ── MÓDULOS ──────────────────────────────────────────────── */
+    .modulos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; }
+    .modulo-card {
+      background: var(--cream);
+      border: 1px solid #DDD4C4;
+      border-radius: 12px;
+      padding: 1.6rem 1.4rem;
+      transition: box-shadow .2s, transform .15s;
+    }
+    .modulo-card:hover { box-shadow: 0 8px 30px rgba(74,44,18,.12); transform: translateY(-3px); }
+    .modulo-icon { font-size: 2rem; margin-bottom: .7rem; }
+    .modulo-card h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--cocoa); margin-bottom: .4rem; }
+    .modulo-card p { font-size: .85rem; color: #5A4030; line-height: 1.55; margin-bottom: .8rem; }
+    .modulo-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      background: var(--mist);
+      color: var(--sage);
+      padding: .2rem .6rem;
+      border-radius: 50px;
+      letter-spacing: .05em;
+    }
+
+    /* ── ARQUITECTURA ─────────────────────────────────────────── */
+    .arq-bg { background: var(--cocoa); }
+    .arq-bg .section-title { color: var(--gold); }
+    .arq-bg .section-lead { color: #C8BAA8; }
+    .arq-bg .section-label { color: var(--terracotta); }
+    .layer-stack { display: flex; flex-direction: column; gap: 1rem; max-width: 700px; margin: auto; }
+    .layer {
+      border-radius: var(--r);
+      padding: 1.4rem 1.8rem;
+      display: flex; align-items: flex-start; gap: 1.2rem;
+    }
+    .layer-pres { background: rgba(200,155,60,.15); border: 1px solid rgba(200,155,60,.3); }
+    .layer-neg  { background: rgba(196,98,45,.15);  border: 1px solid rgba(196,98,45,.3); }
+    .layer-dat  { background: rgba(92,122,94,.15);  border: 1px solid rgba(92,122,94,.3); }
+    .layer-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: .1rem; }
+    .layer h4 { font-weight: 600; color: var(--cream); margin-bottom: .25rem; font-size: 1rem; }
+    .layer p  { font-size: .83rem; color: #C8BAA8; line-height: 1.5; }
+    .layer-tech {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      background: rgba(255,255,255,.1);
+      color: var(--gold);
+      padding: .2rem .55rem;
+      border-radius: 4px;
+      margin-top: .5rem;
+    }
+    .arrow-down { text-align: center; color: rgba(200,155,60,.5); font-size: 1.4rem; line-height: 1; }
+
+    /* ── FORMULARIO ───────────────────────────────────────────── */
+    .form-bg { background: var(--parchment); }
+    .form-wrapper {
+      max-width: 640px;
+      margin: auto;
+      background: var(--cream);
+      border-radius: 16px;
+      border: 1px solid #DDD4C4;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 6px 40px rgba(74,44,18,.08);
+    }
+    .form-header { margin-bottom: 2rem; }
+    .form-header h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--cocoa); margin-bottom: .3rem; }
+    .form-header p { font-size: .85rem; color: #7A6050; }
+    .form-db-note {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      color: var(--sage);
+      background: var(--mist);
+      padding: .25rem .6rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 1.8rem;
+    }
+    .form-row { margin-bottom: 1.3rem; }
+    .form-row label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--cocoa);
+      margin-bottom: .4rem;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .field-map {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      color: var(--terracotta);
+      font-weight: 400;
+    }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1.5px solid #DDD4C4;
+      border-radius: var(--r);
+      font-family: var(--font-body);
+      font-size: .9rem;
+      color: var(--ink);
+      background: #fff;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      border-color: var(--cocoa);
+      box-shadow: 0 0 0 3px rgba(74,44,18,.08);
+    }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-submit {
+      width: 100%;
+      padding: .9rem;
+      background: var(--cocoa);
+      color: var(--gold);
+      border: none;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .04em;
+      transition: background .2s, transform .15s;
+      margin-top: .5rem;
+    }
+    .btn-submit:hover { background: #2E1A08; transform: translateY(-1px); }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .form-success .check { font-size: 3rem; margin-bottom: .7rem; }
+    .form-success h4 { font-family: var(--font-display); font-size: 1.3rem; color: var(--sage); margin-bottom: .4rem; }
+    .form-success p  { font-size: .9rem; color: #5A4030; }
+    .form-success .pedido-num {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--cocoa);
+      background: var(--parchment);
+      padding: .4rem 1rem;
+      border-radius: var(--r);
+      display: inline-block;
+      margin: .6rem 0;
+    }
+
+    /* ── REQUISITOS ───────────────────────────────────────────── */
+    .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .req-group { background: var(--cream); border-radius: var(--r); padding: 1.4rem; border: 1px solid #DDD4C4; }
+    .req-group h4 { font-weight: 600; color: var(--cocoa); margin-bottom: .8rem; font-size: .95rem; }
+    .req-item { display: flex; gap: .5rem; align-items: flex-start; margin-bottom: .5rem; }
+    .req-id {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      background: var(--terracotta);
+      color: #fff;
+      padding: .15rem .4rem;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: .15rem;
+    }
+    .req-text { font-size: .83rem; color: #5A4030; line-height: 1.4; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      background: #12090300;
+      background: var(--ink);
+      color: #C8BAA8;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    footer p { font-size: .82rem; line-height: 1.7; }
+    footer .brand { font-family: var(--font-display); color: var(--gold); font-size: 1.1rem; display: block; margin-bottom: .4rem; }
+    footer .tech-stack { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: .8rem; }
+    footer .tech-tag {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      border: 1px solid rgba(200,155,60,.3);
+      color: var(--gold);
+      padding: .2rem .6rem;
+      border-radius: 4px;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 3.5rem 1.2rem 3rem; }
+      .hero-card-wrap { padding-right: 0; }
+      .hero-card { width: 100%; max-width: 380px; }
+      nav { display: none; }
+      .req-grid { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+      .hero-text { padding-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <div class="logo">SIGPCI<span>-JAYE</span></div>
+  <nav>
+    <a href="#problema">Problema</a>
+    <a href="#modulos">Módulos</a>
+    <a href="#arquitectura">Arquitectura</a>
+    <a href="#pedido">Realizar Pedido</a>
+    <a href="#requisitos">Requisitos</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-text">
+    <p class="hero-eyebrow">SIGPCI-JAYE — Sistema Web · El Alto, Bolivia</p>
+    <h1 class="hero-title">
+      Tus regalos,<br>ordenados y<br><em>digitalizados.</em>
+    </h1>
+    <p class="hero-sub">
+      Sistema de Información Web para la Gestión y Control de Productos, Pedidos e Inventarios
+      de la Tienda de Regalos JAYE. Disponible 24/7 desde cualquier dispositivo.
+    </p>
+    <a href="#pedido" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Realizar un pedido
+    </a>
+  </div>
+  <div class="hero-card-wrap">
+    <div class="hero-card">
+      <div class="hero-card-title">Estado del Sistema</div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-num">11</div><div class="stat-label">Req. Func.</div></div>
+        <div class="stat"><div class="stat-num">13</div><div class="stat-label">Req. No Func.</div></div>
+        <div class="stat"><div class="stat-num">10</div><div class="stat-label">Tablas BD</div></div>
+        <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Disponible</div></div>
+      </div>
+      <ul class="module-list">
+        <li>Catálogo Digital Público</li>
+        <li>Pedidos en Línea</li>
+        <li>Control de Inventario</li>
+        <li>Panel de Administración</li>
+        <li>Notificaciones Automáticas</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problema-bg" id="problema">
+  <div class="container">
+    <p class="section-label">Diagnóstico · Hito 1</p>
+    <h2 class="section-title">¿Por qué la tienda necesita un sistema?</h2>
+    <p class="section-lead">
+      El diagnóstico organizacional identificó seis categorías de causas raíz que generaban
+      ineficiencias críticas y caída en ventas para la Tienda de Regalos JAYE.
+    </p>
+    <div class="causa-grid">
+      <div class="causa-card">
+        <div class="causa-icon">👤</div>
+        <h4>Personas</h4>
+        <p>Dependencia de una sola persona, falta de capacitación digital y errores humanos frecuentes en registros.</p>
+      </div>
+      <div class="causa-card">
+        <div class="causa-icon">⚙️</div>
+        <h4>Procesos</h4>
+        <p>Sin procedimientos documentados, doble registro manual y ausencia de control de estados de pedido.</p>
+      </div>
+      <div class="causa-card">
+        <div class="causa-icon">💻</div>
+        <h4>Tecnología</h4>
+        <p>Sin sistema digital, sin vitrina de productos en línea y sin canal de pedidos remotos disponible.</p>
+      </div>
+      <div class="causa-card">
+        <div class="causa-icon">📊</div>
+        <h4>Información</h4>
+        <p>Datos dispersos en papel, sin historial de clientes ni reportes de ventas para toma de decisiones.</p>
+      </div>
+      <div class="causa-card">
+        <div class="causa-icon">🌐</div>
+        <h4>Entorno</h4>
+        <p>Alta demanda estacional no atendida, competencia digital creciente y cambio en hábitos de compra.</p>
+      </div>
+      <div class="causa-card">
+        <div class="causa-icon">💰</div>
+        <h4>Recursos</h4>
+        <p>Presupuesto limitado, sin herramientas de gestión y tiempo insuficiente para atención fuera de horario.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section id="modulos">
+  <div class="container">
+    <p class="section-label">Alcance del Sistema</p>
+    <h2 class="section-title">Módulos del SIGPCI-JAYE</h2>
+    <p class="section-lead">
+      Seis módulos funcionales que cubren el ciclo completo de operación de la tienda,
+      clasificados según taxonomía TPS/MIS (Laudon & Laudon, 2016).
+    </p>
+    <div class="modulos-grid">
+      <div class="modulo-card">
+        <div class="modulo-icon">🛍️</div>
+        <h3>Catálogo Digital</h3>
+        <p>Visualización de productos por tipo de evento (matrimonios, graduaciones, bautizos) con imágenes, precios y filtros. Acceso sin autenticación.</p>
+        <span class="modulo-badge">RF-01 / RF-02 · TPS</span>
+      </div>
+      <div class="modulo-card">
+        <div class="modulo-icon">📝</div>
+        <h3>Pedidos en Línea</h3>
+        <p>Formulario digital que registra pedidos, valida datos del cliente, genera comprobante único y envía notificaciones automáticas.</p>
+        <span class="modulo-badge">RF-03 / RF-04 · TPS</span>
+      </div>
+      <div class="modulo-card">
+        <div class="modulo-icon">📦</div>
+        <h3>Control de Inventario</h3>
+        <p>Registro de materiales e insumos con alertas de stock bajo e historial de movimientos de entrada y salida.</p>
+        <span class="modulo-badge">RF-07 · TPS</span>
+      </div>
+      <div class="modulo-card">
+        <div class="modulo-icon">🖥️</div>
+        <h3>Panel Administrativo</h3>
+        <p>Gestión de productos, categorías, clientes y estados de pedido. Acceso restringido con autenticación JWT.</p>
+        <span class="modulo-badge">RF-05 / RF-06 · MIS</span>
+      </div>
+      <div class="modulo-card">
+        <div class="modulo-icon">📈</div>
+        <h3>Reportes de Ventas</h3>
+        <p>Generación automática de reportes por período y por producto para apoyar la toma de decisiones gerenciales.</p>
+        <span class="modulo-badge">RF-08 · MIS</span>
+      </div>
+      <div class="modulo-card">
+        <div class="modulo-icon">🔔</div>
+        <h3>Notificaciones</h3>
+        <p>Alertas automáticas por correo y WhatsApp al cliente y a la administradora sobre estados y confirmaciones de pedido.</p>
+        <span class="modulo-badge">RF-10 · TPS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARQUITECTURA -->
+<section class="arq-bg" id="arquitectura">
+  <div class="container" style="text-align:center;">
+    <p class="section-label">Diseño Técnico</p>
+    <h2 class="section-title">Arquitectura en Tres Capas</h2>
+    <p class="section-lead" style="margin:auto; margin-bottom:2.5rem; color:#C8BAA8;">
+      El SIGPCI-JAYE implementa arquitectura MVC cliente-servidor con servicios REST,
+      garantizando separación de responsabilidades y facilidad de mantenimiento.
+    </p>
+    <div class="layer-stack">
+      <div class="layer layer-pres">
+        <div class="layer-icon">🖼️</div>
+        <div>
+          <h4>Capa de Presentación</h4>
+          <p>Catálogo web, formulario de pedidos, panel administrativo, gestión de inventario, reportes y dashboard. Interfaces responsivas para móvil y escritorio.</p>
+          <span class="layer-tech">HTML5 · CSS3 · Bootstrap · JavaScript</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="layer layer-neg">
+        <div class="layer-icon">⚙️</div>
+        <div>
+          <h4>Capa de Negocio</h4>
+          <p>Validación de pedidos, gestión de productos y clientes, control de inventario, generación de reportes, notificaciones automáticas y seguridad con autenticación JWT.</p>
+          <span class="layer-tech">PHP Laravel · API REST</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="layer layer-dat">
+        <div class="layer-icon">🗄️</div>
+        <div>
+          <h4>Capa de Datos</h4>
+          <p>10 tablas normalizadas: CLIENTE, USUARIO_ADMIN, PRODUCTO, CATEGORÍA, PEDIDO, DETALLE_PEDIDO, ESTADO_PEDIDO, TIPO_EVENTO, MATERIAL, MOVIMIENTO_INVENTARIO.</p>
+          <span class="layer-tech">MySQL · Modelo Relacional</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO DE PEDIDO -->
+<section class="form-bg" id="pedido">
+  <div class="container">
+    <div style="text-align:center; max-width:560px; margin:auto 0 2.5rem;">
+      <p class="section-label">Caso de Uso Validador · CU-03</p>
+      <h2 class="section-title">Realizar un Pedido</h2>
+      <p class="section-lead">
+        Este formulario simula la inserción en la base de datos del sistema. Cada campo corresponde
+        a un atributo del DER.
+      </p>
+    </div>
+    <div class="form-wrapper">
+      <div class="form-header">
+        <h3>Nuevo Pedido — Tienda JAYE</h3>
+        <p>Complete todos los campos para registrar su pedido personalizado.</p>
+      </div>
+      <span class="form-db-note">Mapeo: CLIENTE + PEDIDO + DETALLE_PEDIDO (DER)</span>
+
+      <form id="pedidoForm" novalidate>
+        <!-- Datos del cliente -->
+        <p style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.8rem;">Datos del Cliente</p>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Nombre completo <span class="field-map">→ CLIENTE.nombre</span></label>
+            <input type="text" id="nombre" placeholder="Ej. María Flores" required />
+          </div>
+          <div class="form-row">
+            <label>Teléfono / WhatsApp <span class="field-map">→ CLIENTE.telefono</span></label>
+            <input type="tel" id="telefono" placeholder="Ej. 77812345" required />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Correo electrónico <span class="field-map">→ CLIENTE.email</span></label>
+            <input type="email" id="email" placeholder="correo@ejemplo.com" required />
+          </div>
+          <div class="form-row">
+            <label>Ciudad / Dirección <span class="field-map">→ CLIENTE.direccion</span></label>
+            <input type="text" id="direccion" placeholder="Ej. El Alto, Zona Villa Adela" />
+          </div>
+        </div>
+
+        <!-- Datos del pedido -->
+        <p style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--terracotta);margin:.5rem 0 .8rem;">Detalle del Pedido</p>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Tipo de evento <span class="field-map">→ TIPO_EVENTO.nombre</span></label>
+            <select id="tipoEvento" required>
+              <option value="">Seleccionar evento...</option>
+              <option>Matrimonio</option>
+              <option>Graduación</option>
+              <option>Bautizo</option>
+              <option>Quince años</option>
+              <option>Licencia de cuartel</option>
+              <option>Toma de nombres</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Categoría de regalo <span class="field-map">→ CATEGORIA.nombre</span></label>
+            <select id="categoria" required>
+              <option value="">Seleccionar categoría...</option>
+              <option>Arreglos decorativos</option>
+              <option>Regalos personalizados</option>
+              <option>Cajas sorpresa</option>
+              <option>Flores y plantas</option>
+              <option>Recuerdos artesanales</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-row">
+            <label>Producto solicitado <span class="field-map">→ PRODUCTO.nombre</span></label>
+            <input type="text" id="producto" placeholder="Ej. Canasta decorada para bautizo" required />
+          </div>
+          <div class="form-row">
+            <label>Cantidad <span class="field-map">→ DETALLE_PEDIDO.cantidad</span></label>
+            <input type="number" id="cantidad" min="1" max="100" value="1" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Observaciones / Personalización <span class="field-map">→ PEDIDO.observaciones</span></label>
+          <textarea id="observaciones" placeholder="Colores, dedicatorias, fecha de entrega requerida..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Enviar Pedido →</button>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="check">✅</div>
+        <h4>¡Pedido registrado correctamente!</h4>
+        <div class="pedido-num" id="pedidoNum"></div>
+        <p>La administradora recibirá una notificación automática.<br>Se enviará su comprobante al correo registrado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUISITOS -->
+<section id="requisitos">
+  <div class="container">
+    <p class="section-label">Especificación · IEEE 830</p>
+    <h2 class="section-title">Requisitos del Sistema</h2>
+    <p class="section-lead">Requisitos funcionales y no funcionales documentados conforme al estándar IEEE 830-1998.</p>
+    <div class="req-grid">
+      <div class="req-group">
+        <h4>Requisitos Funcionales (RF)</h4>
+        <div class="req-item"><span class="req-id">RF-01</span><span class="req-text">Visualizar productos con imagen, descripción y precio.</span></div>
+        <div class="req-item"><span class="req-id">RF-02</span><span class="req-text">Filtrar productos por categoría o tipo de evento.</span></div>
+        <div class="req-item"><span class="req-id">RF-03</span><span class="req-text">Realizar pedidos en línea mediante formulario digital.</span></div>
+        <div class="req-item"><span class="req-id">RF-04</span><span class="req-text">Generar automáticamente número único de pedido.</span></div>
+        <div class="req-item"><span class="req-id">RF-05</span><span class="req-text">Actualizar el estado de los pedidos.</span></div>
+        <div class="req-item"><span class="req-id">RF-06</span><span class="req-text">Registrar, editar y eliminar productos del catálogo.</span></div>
+        <div class="req-item"><span class="req-id">RF-07</span><span class="req-text">Gestionar inventario de materiales e insumos.</span></div>
+        <div class="req-item"><span class="req-id">RF-08</span><span class="req-text">Generar reportes de ventas y pedidos.</span></div>
+        <div class="req-item"><span class="req-id">RF-09</span><span class="req-text">Almacenar historial de pedidos por cliente.</span></div>
+        <div class="req-item"><span class="req-id">RF-10</span><span class="req-text">Enviar notificaciones automáticas sobre pedidos.</span></div>
+        <div class="req-item"><span class="req-id">RF-11</span><span class="req-text">Autenticación por usuario y contraseña en panel admin.</span></div>
+      </div>
+      <div class="req-group">
+        <h4>Requisitos No Funcionales (RNF)</h4>
+        <div class="req-item"><span class="req-id">RNF-01</span><span class="req-text">Autenticación requerida para acceso administrativo.</span></div>
+        <div class="req-item"><span class="req-id">RNF-02</span><span class="req-text">Contraseñas almacenadas con hash seguro (bcrypt).</span></div>
+        <div class="req-item"><span class="req-id">RNF-03</span><span class="req-text">Protección de datos personales de los clientes.</span></div>
+        <div class="req-item"><span class="req-id">RNF-04</span><span class="req-text">Tiempo de respuesta máximo de 3 segundos.</span></div>
+        <div class="req-item"><span class="req-id">RNF-05</span><span class="req-text">Soporte de múltiples consultas simultáneas.</span></div>
+        <div class="req-item"><span class="req-id">RNF-06</span><span class="req-text">Disponibilidad 24/7 mediante acceso web.</span></div>
+        <div class="req-item"><span class="req-id">RNF-07</span><span class="req-text">Compatible con Chrome, Edge y Firefox.</span></div>
+        <div class="req-item"><span class="req-id">RNF-08</span><span class="req-text">Interfaz intuitiva para usuarios sin conocimiento técnico.</span></div>
+        <div class="req-item"><span class="req-id">RNF-09</span><span class="req-text">Diseño responsivo para dispositivos móviles.</span></div>
+        <div class="req-item"><span class="req-id">RNF-12</span><span class="req-text">Arquitectura MVC para facilitar el mantenimiento.</span></div>
+        <div class="req-item"><span class="req-id">RNF-13</span><span class="req-text">Base de datos relacional MySQL o PostgreSQL.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="brand">SIGPCI-JAYE</span>
+  <p>Sistema de Información Web para la Gestión y Control de Productos, Pedidos e Inventarios<br>
+  Tienda de Regalos JAYE · El Alto, Bolivia · 2026<br>
+  Desarrollado por <strong style="color:var(--gold)">Jhoan Arcel Tuco Marca</strong> — Universidad Franz Tamayo · Ingeniería de Sistemas</p>
+  <div class="tech-stack">
+    <span class="tech-tag">PHP Laravel</span>
+    <span class="tech-tag">MySQL</span>
+    <span class="tech-tag">Bootstrap</span>
+    <span class="tech-tag">REST API</span>
+    <span class="tech-tag">JWT Auth</span>
+    <span class="tech-tag">MVC Architecture</span>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('pedidoForm');
+  const success = document.getElementById('formSuccess');
+  const pedidoNum = document.getElementById('pedidoNum');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const required = ['nombre','telefono','email','tipoEvento','categoria','producto'];
+    let valid = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) { el.style.borderColor = '#C4622D'; valid = false; }
+      else { el.style.borderColor = '#DDD4C4'; }
+    });
+    if (!valid) return;
+
+    const num = 'JAYE-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*9000)+1000);
+    pedidoNum.textContent = '📋 Nro. de Pedido: ' + num;
+
+    form.style.display = 'none';
+    success.style.display = 'block';
+  });
+</script>
+</body>
+</html>
